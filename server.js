@@ -15,9 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
     cookieSession({
       name: "virtualyou-session",
-      keys: ["COOKIE_SECRET"], // should use as secret environment variable
-//      domain: '.virtualyou.info', // comment if testing local
-      httpOnly: true, // comment if testing local ???
+      keys: ["COOKIE_SECRET"],
+//      domain: '.virtualyou.info', // comment if testing local, for sub-domains but maybe env satisfies
+      httpOnly: true,
       sameSite: 'strict'
     })
 );
@@ -25,12 +25,14 @@ app.use(
 // database
 const db = require("./app/models");
 const Role = db.role;
+
 /*
   db.sequelize.sync({force: true}).then(() => {
     console.log('Drop and Resync Db');
     initial();
   });
 */
+
 db.sequelize.sync();
 
 // simple route
@@ -70,7 +72,4 @@ function initial() {
     id: 4,
     name: "admin",
   });
-
-
-
 }

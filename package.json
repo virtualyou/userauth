@@ -1,7 +1,7 @@
 {
-  "name": "vy-express-userauth",
-  "version": "0.1.3",
-  "description": "Node.js Express Login and Registration MVP",
+  "name": "userauth",
+  "version": "0.0.0",
+  "description": "Node.js Express User and Auth API",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -27,6 +27,9 @@
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^2.3.3",
     "sequelize": "^6.31.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1"
   },
   "engines": {
     "node": "^18.16.0"

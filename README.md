@@ -30,7 +30,7 @@ HTTP content based on ROLE_???. Ignore these for now. They are not included in P
 
 ## Project setup
 Follow these steps to run this API locally.
-1. `git clone https://github.com/dlwhitehurst/userauth.git`
+1. `git clone git@github.com:dlwhitehurst/userauth.git`
 2. `cd userauth`
 3. `cp docker-compose.yaml ~/docker-compose/virtualyou/`
 4. `cd ~/docker-compose/virtualyou`
@@ -63,18 +63,14 @@ Kubernetes and it's using MariaDB as a service. Use the docker-compose in an iso
 this repo because the docker image uses a volume locally called `data/` and you need root privileges to
 delete this volume.
 
-E.g. local client JDBC connection `jdbc:mariadb://localhost:3306/virtualyou`
+NOTE: The other API hostings will use the MariaDB schema `virtualyou`. You only need to run the database
+in the background using the docker-compose once.
 
 ### Environment
-Now copy these exports into your local terminal.
-```bash
-export COOKIE_SECRET=virtual-you-secret
-export DB_HOST='localhost'
-export DB_USERNAME='root'
-export DB_PASSWORD='mariadbAdmin123'
-export DB_SCHEMA='virtualyou'
-export NODE_OPTIONS="--unhandled-rejections=strict"
-```
+The API ENV is contained in a file with this repo called `.env`. The values are configured to work in a
+local environment or workstation. Naturally in production, these values would be different and also
+DO NOT COMMIT production values to this repository.
+
 Disclaimer: These exports will be for the local MariaDB image described in `docker-compose.yaml`.
 
 ### Dependencies
