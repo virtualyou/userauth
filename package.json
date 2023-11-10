@@ -17,8 +17,8 @@
     "authorization",
     "mysql"
   ],
-  "author": "bezkoder",
-  "license": "ISC",
+  "author": "dlwhitehurst",
+  "license": "",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-session": "^2.0.0",
