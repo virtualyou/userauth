@@ -33,7 +33,6 @@ exports.getAllUsers = async (req, res) => {
 
 // ROLE_ANY (still needs authorization in production)
 exports.getUserById = async (req, res) => {
-  //alert("Hello");
   try {
     const user = await User.findByPk(req.params.id);
     if (!user) {
@@ -61,3 +60,4 @@ exports.getUserRoles = async (req, res) => {
       return res.status(500).send({ message: error.message });
     }
 };
+

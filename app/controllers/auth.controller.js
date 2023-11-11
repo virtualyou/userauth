@@ -15,6 +15,7 @@ exports.signup = async (req, res) => {
       username: req.body.username,
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, 8),
+      ownerId: 0
     });
 
     if (req.body.roles) {
@@ -66,7 +67,7 @@ exports.signin = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ id: user.id },
+    const token = jwt.sign({ id: user.id , owner: user.ownerId },
                            config.secret,
                            {
                             algorithm: 'HS256',

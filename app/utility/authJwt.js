@@ -21,6 +21,7 @@ verifyToken = (req, res, next) => {
                 });
               }
               req.userId = decoded.id;
+              req.ownerId = decoded.owner;
               next();
              });
 };
