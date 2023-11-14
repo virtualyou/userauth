@@ -7,15 +7,22 @@ const Op = db.Sequelize.Op;
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const bip39 = require('bip39');
+
 
 exports.signup = async (req, res) => {
   // Save User to Database
   try {
+    const mnemonic1 = bip39.generateMnemonic();
+    const mnemonic2 = bip39.generateMnemonic();
+
     const user = await User.create({
       username: req.body.username,
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, 8),
-      ownerId: 0
+      ownerId: 0,
+      agentMnemonic: mnemonic1,
+      monitorMnemonic: mnemonic2
     });
 
     if (req.body.roles) {

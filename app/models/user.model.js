@@ -11,7 +11,14 @@ module.exports = (sequelize, Sequelize) => {
     },
     ownerId: {
       type: Sequelize.INTEGER
-    }
+    },
+    agentMnemonic: {
+      type: Sequelize.STRING
+    },
+    monitorMnemonic: {
+      type: Sequelize.STRING
+    },
+
   });
 
   return User;
