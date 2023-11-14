@@ -28,14 +28,20 @@ exports.signup = async (req, res) => {
       });
 
       const result = user.setRoles(roles);
-      if (result) res.send({ message: "User registered successfully!" });
-    } else {
-      // user has role = 1
-      const result = user.setRoles([1]);
-      if (result) res.send({ message: "User registered successfully!" });
+      if (result) {
+        res.send({message: "User registered successfully!"});
+      }
     }
-  } catch (error) {
-    res.status(500).send({ message: error.message });
+    else {
+        // user has role = 1
+        const result = user.setRoles([1]);
+        if (result) {
+          res.send({message: "User registered successfully!"});
+        }
+      }
+    }
+  catch (error) {
+    res.status(500).send({message: error.message});
   }
 };
 
