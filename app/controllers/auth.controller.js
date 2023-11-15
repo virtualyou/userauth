@@ -103,6 +103,9 @@ exports.signin = async (req, res) => {
       username: user.username,
       email: user.email,
       roles: authorities,
+      ownerId: user.ownerId,
+      agentMnemonic: user.agentMnemonic,
+      monitorMnemonic: user.monitorMnemonic
     });
   } catch (error) {
       return res.status(500).send({ message: error.message });
