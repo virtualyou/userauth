@@ -22,7 +22,9 @@ exports.signup = async (req, res) => {
       password: bcrypt.hashSync(req.body.password, 8),
       ownerId: 0,
       agentMnemonic: mnemonic1,
-      monitorMnemonic: mnemonic2
+      monitorMnemonic: mnemonic2,
+      agentId: 0,
+      monitorId: 0
     });
 
     if (req.body.roles) {
@@ -105,7 +107,9 @@ exports.signin = async (req, res) => {
       roles: authorities,
       ownerId: user.ownerId,
       agentMnemonic: user.agentMnemonic,
-      monitorMnemonic: user.monitorMnemonic
+      monitorMnemonic: user.monitorMnemonic,
+      agentId: user.agentId,
+      monitorId: user.monitorId
     });
   } catch (error) {
       return res.status(500).send({ message: error.message });

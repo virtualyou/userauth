@@ -18,6 +18,12 @@ module.exports = (sequelize, Sequelize) => {
     monitorMnemonic: {
       type: Sequelize.STRING
     },
+    agentId: {
+      type: Sequelize.INTEGER
+    },
+    monitorId: {
+      type: Sequelize.INTEGER
+    },
 
   });
 
