@@ -20,7 +20,7 @@ exports.signup = async (req, res) => {
       username: req.body.username,
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, 8),
-      ownerId: 0,
+      ownerId: req.body.ownerId,
       agentMnemonic: mnemonic1,
       monitorMnemonic: mnemonic2,
       agentId: 0,
