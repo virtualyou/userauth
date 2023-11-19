@@ -10,47 +10,47 @@ module.exports = function(app) {
     next();
   });
 
-  app.get("/api/v1/all", controller.allAccess);
+  app.get("/userauth/v1/all", controller.allAccess);
 
   app.get(
-    "/api/v1/owner",
+    "/userauth/v1/owner",
     [authJwt.verifyToken, authJwt.isOwner],
     controller.ownerBoard
   );
 
   app.get(
-      "/api/v1/agent",
+      "/userauth/v1/agent",
       [authJwt.verifyToken, authJwt.isAgent],
       controller.agentBoard
   );
 
   app.get(
-      "/api/v1/monitor",
+      "/userauth/v1/monitor",
       [authJwt.verifyToken, authJwt.isMonitor],
       controller.monitorBoard
   );
 
   app.get(
-    "/api/v1/admin",
+    "/userauth/v1/admin",
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
   );
 
   // admin only
   app.get(
-      "/api/v1/users",
+      "/userauth/v1/users",
       [authJwt.verifyToken], //, authJwt.isAdmin],
       controller.getAllUsers
   );
 
   app.get(
-    "/api/v1/users/:id",
+    "/userauth/v1/users/:id",
     [authJwt.verifyToken],
     controller.getUserById
   );
 
   app.get(
-      "/api/v1/users/:id/roles",
+      "/userauth/v1/users/:id/roles",
       [authJwt.verifyToken],
       controller.getUserRoles
   );
