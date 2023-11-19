@@ -1,6 +1,6 @@
 {
   "name": "userauth",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Node.js Express User and Auth API",
   "main": "server.js",
   "scripts": {
