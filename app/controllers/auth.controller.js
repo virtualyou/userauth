@@ -97,7 +97,7 @@ exports.signin = async (req, res) => {
     }
 
     req.session.token = token;
-    res.set('Access-Control-Allow-Origin', 'http://localhost:3004');
+    res.set('Access-Control-Allow-Origin', process.env.ACCESS_CONTROL_ALLOW_ORIGIN);
     res.set('Access-Control-Allow-Credentials', 'true');
 
     return res.status(200).send({
