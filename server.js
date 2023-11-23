@@ -26,13 +26,14 @@ app.use(
 const db = require("./app/models");
 const Role = db.role;
 
-/*
-db.sequelize.sync({force: true}).then(() => {
-    console.log('Drop and Resync Db');
-    initial();
-  });
-*/
-db.sequelize.sync();
+if (process.env.INIT === true ) {
+    db.sequelize.sync({force: true}).then(() => {
+        console.log('Drop and Resync Db');
+        initial();
+    });
+} else {
+    db.sequelize.sync();
+}
 
 // simple route
 app.get("/", (req, res) => {
