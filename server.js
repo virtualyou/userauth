@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const cookieSession = require("cookie-session");
+const init = process.argv.includes('--init=true');
 
 const app = express();
 
@@ -26,7 +27,7 @@ app.use(
 const db = require("./app/models");
 const Role = db.role;
 
-if (process.env.INIT === true ) {
+if (init) {
     db.sequelize.sync({force: true}).then(() => {
         console.log('Drop and Resync Db');
         initial();
