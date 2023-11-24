@@ -37,7 +37,7 @@ app.use(
     cookieSession({
       name: "virtualyou-session",
       keys: ["COOKIE_SECRET"],
-//      domain: '.virtualyou.info', // comment if testing local, for sub-domains but maybe env satisfies
+      domain: '.virtualyou.info',
       httpOnly: true,
       sameSite: 'strict'
     })
