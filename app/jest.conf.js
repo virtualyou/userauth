@@ -16,12 +16,8 @@
  * limitations under the License.
  *
  */
-const app = require('./app/app.js');
 
-// set port, listen for requests
-const PORT = process.env.PORT || 3001;
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
-});
-
+module.exports = {
+    // jest configuration options
+    globalTeardown: './models/teardown.js'
+};
