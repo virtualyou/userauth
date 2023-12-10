@@ -18,7 +18,7 @@
  */
 
 const request = require('supertest');
-const app = require('../app/app.js');
+const app = require('../src/app.js');
 
 describe('Test Signup', () => {
     it('POST /userauth/v1/auth/signup', async () => {
