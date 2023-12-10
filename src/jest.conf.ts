@@ -18,6 +18,6 @@
  */
 
 module.exports = {
-    // jest configuration options
-    globalTeardown: './models/teardown.ts'
+  // jest configuration options
+  globalTeardown: "./models/teardown.ts",
 };

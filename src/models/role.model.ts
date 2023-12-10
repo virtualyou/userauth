@@ -19,11 +19,11 @@
  */
 
 const Role = (sequelize: any, Sequelize: any) => {
-    return sequelize.define("roles", {
-        name: {
-            type: Sequelize.STRING
-        }
-    });
+  return sequelize.define("roles", {
+    name: {
+      type: Sequelize.STRING,
+    },
+  });
 };
 
-export default Role
+export default Role;

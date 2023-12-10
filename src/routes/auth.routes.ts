@@ -18,10 +18,10 @@
  * auth.routes.ts
  */
 
-import { NextFunction, Request, Response} from 'express';
-import express from 'express';
-import authController from '../controllers/auth.controller';
-import verifySignUp from '../utility/verifySignUp';
+import { NextFunction, Request, Response } from "express";
+import express from "express";
+import authController from "../controllers/auth.controller";
+import verifySignUp from "../utility/verifySignUp";
 
 const authRouter = express();
 
@@ -41,25 +41,18 @@ const errorHandler = (err: ExpressError, _req: Request, res: Response) => {
 */
 
 authRouter.use((_req: Request, res: Response, next: NextFunction) => {
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, Content-Type, Accept"
-    );
-    next();
+  res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
+  next();
 });
 
 authRouter.post(
-    "/userauth/v1/auth/signup",
-    [
-        verifySignUp.checkDuplicateUsernameOrEmail,
-        verifySignUp.checkRolesExisted
-    ],
-    authController.signup
+  "/userauth/v1/auth/signup",
+  [verifySignUp.checkDuplicateUsernameOrEmail, verifySignUp.checkRolesExisted],
+  authController.signup
 );
 
 authRouter.post("/userauth/v1/auth/signin", authController.signin);
 
 authRouter.post("/userauth/v1/auth/signout", authController.signout);
-
 
 export default authRouter;

@@ -1,4 +1,4 @@
 declare const cookieConfig: {
-    secret: string;
+  secret: string;
 };
 export default cookieConfig;

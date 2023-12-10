@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -18,17 +17,16 @@
  *
  * auth.controller.ts
  */
-import db from '../models';
-import { Request, Response } from 'express';
-import * as jwt from 'jsonwebtoken';
-import * as bcrypt from 'bcryptjs';
-import * as bip39 from 'bip39'; // TODO read about the syntax here
-import cookieConfig from '../config/auth.config';
+import db from "../models";
+import { Request, Response } from "express";
+import * as jwt from "jsonwebtoken";
+import * as bcrypt from "bcryptjs";
+import * as bip39 from "bip39"; // TODO read about the syntax here
+import cookieConfig from "../config/auth.config";
 
 const User = db.user;
 const Role = db.role;
 const Op = db.Sequelize.Op;
-
 
 /*
 class ExpressError extends Error {
@@ -44,7 +42,6 @@ const errorHandler = (err: ExpressError, _req: Request, res: Response) => {
 */
 
 const signup = async (req: Request, res: Response) => {
-
   // Save User to Database
   try {
     const mnemonic1 = bip39.generateMnemonic();
@@ -58,7 +55,7 @@ const signup = async (req: Request, res: Response) => {
       agentMnemonic: mnemonic1,
       monitorMnemonic: mnemonic2,
       agentId: 0,
-      monitorId: 0
+      monitorId: 0,
     });
 
     // user could have multiple roles
@@ -73,19 +70,17 @@ const signup = async (req: Request, res: Response) => {
 
       const result = user.setRoles(roles);
       if (result) {
-        res.send({message: "User registered successfully!"});
+        res.send({ message: "User registered successfully!" });
+      }
+    } else {
+      // user only one role
+      const result = user.setRoles([1]);
+      if (result) {
+        res.send({ message: "User registered successfully!" });
       }
     }
-    else {
-        // user only one role
-        const result = user.setRoles([1]);
-        if (result) {
-          res.send({message: "User registered successfully!"});
-        }
-      }
-    }
-  catch (err: any) {
-    res.status(500).send('Internal server error');
+  } catch (err: any) {
+    res.status(500).send("Internal server error");
   }
 };
 
@@ -112,13 +107,15 @@ const signin = async (req: Request, res: Response) => {
       });
     }
 
-    const token = jwt.sign({ id: user.id , owner: user.ownerId },
-                           cookieConfig.secret,
-                           {
-                            algorithm: 'HS256',
-                            allowInsecureKeySizes: true,
-                            expiresIn: 86400, // 24 hours
-                           });
+    const token = jwt.sign(
+      { id: user.id, owner: user.ownerId },
+      cookieConfig.secret,
+      {
+        algorithm: "HS256",
+        allowInsecureKeySizes: true,
+        expiresIn: 86400, // 24 hours
+      }
+    );
 
     let authorities = [];
     const roles = await user.getRoles();
@@ -130,8 +127,11 @@ const signin = async (req: Request, res: Response) => {
     // @ts-ignore
     req.session.token = token;
 
-    res.set('Access-Control-Allow-Origin', process.env['ACCESS_CONTROL_ALLOW_ORIGIN']);
-    res.set('Access-Control-Allow-Credentials', 'true');
+    res.set(
+      "Access-Control-Allow-Origin",
+      process.env["ACCESS_CONTROL_ALLOW_ORIGIN"]
+    );
+    res.set("Access-Control-Allow-Credentials", "true");
 
     return res.status(200).send({
       id: user.id,
@@ -142,10 +142,10 @@ const signin = async (req: Request, res: Response) => {
       agentMnemonic: user.agentMnemonic,
       monitorMnemonic: user.monitorMnemonic,
       agentId: user.agentId,
-      monitorId: user.monitorId
+      monitorId: user.monitorId,
     });
   } catch (err: any) {
-      return res.status(500).send({ message: "Internal server error" });
+    return res.status(500).send({ message: "Internal server error" });
   }
 };
 
@@ -154,10 +154,10 @@ const signout = async (req: Request, res: Response) => {
     // @ts-ignore
     req.session.token = null;
     return res.status(200).send({
-      message: "You've been signed out!"
+      message: "You've been signed out!",
     });
   } catch (error) {
-      return res.status(500).send({ message: "Internal server error" });
+    return res.status(500).send({ message: "Internal server error" });
   }
 };
 

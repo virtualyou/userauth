@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -18,44 +17,48 @@
  *
  */
 
-import db from '../models';
-import { NextFunction, Request, Response } from 'express';
+import db from "../models";
+import { NextFunction, Request, Response } from "express";
 
 const ROLES = db.ROLES;
 const User = db.user;
 
-const checkDuplicateUsernameOrEmail = async (req: Request, res: Response, next: NextFunction) => {
+const checkDuplicateUsernameOrEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     // Username
     let user = await User.findOne({
       where: {
-        username: req.body.username
-      }
+        username: req.body.username,
+      },
     });
 
     if (user) {
       return res.status(400).send({
-        message: "Failed! Username is already in use!"
+        message: "Failed! Username is already in use!",
       });
     }
 
     // Email
     user = await User.findOne({
       where: {
-        email: req.body.email
-      }
+        email: req.body.email,
+      },
     });
 
     if (user) {
       return res.status(400).send({
-        message: "Failed! Email is already in use!"
+        message: "Failed! Email is already in use!",
       });
     }
 
     next();
   } catch (error) {
     return res.status(500).send({
-      message: "Internal server error"
+      message: "Internal server error",
     });
   }
 };
@@ -65,19 +68,19 @@ const checkRolesExisted = (req: Request, res: Response, next: NextFunction) => {
     for (let i = 0; i < req.body.roles.length; i++) {
       if (!ROLES.includes(req.body.roles[i])) {
         res.status(400).send({
-          message: "Failed! Role does not exist = " + req.body.roles[i]
+          message: "Failed! Role does not exist = " + req.body.roles[i],
         });
         return;
       }
     }
   }
-  
+
   next();
 };
 
 const verifySignUp = {
   checkDuplicateUsernameOrEmail,
-  checkRolesExisted
+  checkRolesExisted,
 };
 
 //module.exports = verifySignUp;

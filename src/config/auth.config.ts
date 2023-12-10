@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -20,7 +19,7 @@
  */
 
 const cookieConfig = {
-  secret: "virtual-you-secret"
+  secret: "virtual-you-secret",
 };
 
 export default cookieConfig;

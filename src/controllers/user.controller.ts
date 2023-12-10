@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -19,7 +18,7 @@
  */
 
 import { Request, Response } from "express";
-import db from '../models';
+import db from "../models";
 
 const User = db.user;
 
@@ -58,7 +57,7 @@ const getUserById = async (req: Request, res: Response) => {
   try {
     const user = await User.findByPk(req.params["id"]);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
     return res.json(user);
   } catch (error) {
@@ -71,18 +70,17 @@ const getUserRoles = async (req: Request, res: Response) => {
   try {
     const user = await User.findByPk(req.params["id"]);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
     const roles = await user.getRoles();
     if (!roles) {
-      return res.status(404).json({ error: 'User roles not found' });
+      return res.status(404).json({ error: "User roles not found" });
     }
 
     return res.json(roles);
-
-    } catch (error) {
-      return res.status(500).send({ message: "Internal server error" });
-    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal server error" });
+  }
 };
 
 const userController = {
@@ -96,7 +94,6 @@ const userController = {
   getUserRoles,
   getUserById,
   getAllUsers,
-
-}
+};
 
 export default userController;

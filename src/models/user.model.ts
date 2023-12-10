@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -22,30 +21,30 @@
 const User = (sequelize: any, Sequelize: any) => {
   return sequelize.define("users", {
     username: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     email: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     password: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     ownerId: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     },
     agentMnemonic: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     monitorMnemonic: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     agentId: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     },
     monitorId: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     },
   });
 };
 
-export default User
+export default User;

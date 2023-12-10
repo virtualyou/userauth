@@ -1,2 +1,2 @@
-declare let db: any;
+declare const db: any;
 export default db;

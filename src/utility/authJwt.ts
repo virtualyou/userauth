@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -19,20 +18,15 @@
  * authJwt.ts
  */
 
-import jwt from 'jsonwebtoken';
-import cookieConfig from '../config/auth.config';
-import db from '../models';
+import jwt from "jsonwebtoken";
+import cookieConfig from "../config/auth.config";
+import db from "../models";
 import { Request, Response, NextFunction } from "express";
-import logger from "../middleware/logger";
 
 const User = db.user;
 
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-  logger.log('info', 'Request: ' + req);
-  logger.log('info', 'Token: ' + req.session.token);
-
-
-  let token = req.session.token;
+  const token = req.session.token;
 
   if (!token) {
     return res.status(403).send({
@@ -40,20 +34,18 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     });
   }
 
-  jwt.verify(token,
-             cookieConfig.secret,
-             (err, decoded) => {
-              if (err) {
-                return res.status(401).send({
-                  message: "Unauthorized!",
-                });
-              }
-              // @ts-ignore - decoded from jwt
-               req.userId = decoded.id;
-              // @ts-ignore
-               req.ownerId = decoded.owner;
-              next();
-             });
+  jwt.verify(token, cookieConfig.secret, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({
+        message: "Unauthorized!",
+      });
+    }
+    // @ts-expect-error could be uninitialized, doubt it
+    req.userId = decoded.id;
+    // @ts-expect-error could be uninitialized, doubt it
+    req.ownerId = decoded.owner;
+    next();
+  });
 };
 
 const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
@@ -141,13 +133,12 @@ const isMonitor = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-
 const authJwt = {
   verifyToken,
   isAdmin,
   isOwner,
   isAgent,
-  isMonitor
+  isMonitor,
 };
 
 export default authJwt;
