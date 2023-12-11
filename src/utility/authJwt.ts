@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -16,15 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
+ * authJwt.ts
  */
 
-const jwt = require("jsonwebtoken");
-const config = require("../config/auth.config.js");
-const db = require("../models");
+import jwt from "jsonwebtoken";
+import cookieConfig from "../config/auth.config";
+import db from "../models";
+import { Request, Response, NextFunction } from "express";
+
 const User = db.user;
 
-verifyToken = (req, res, next) => {
-  let token = req.session.token;
+const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.session.token;
 
   if (!token) {
     return res.status(403).send({
@@ -32,21 +34,21 @@ verifyToken = (req, res, next) => {
     });
   }
 
-  jwt.verify(token,
-             config.secret,
-             (err, decoded) => {
-              if (err) {
-                return res.status(401).send({
-                  message: "Unauthorized!",
-                });
-              }
-              req.userId = decoded.id;
-              req.ownerId = decoded.owner;
-              next();
-             });
+  jwt.verify(token, cookieConfig.secret, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({
+        message: "Unauthorized!",
+      });
+    }
+    // @ts-expect-error could be uninitialized, doubt it
+    req.userId = decoded.id;
+    // @ts-expect-error could be uninitialized, doubt it
+    req.ownerId = decoded.owner;
+    next();
+  });
 };
 
-isAdmin = async (req, res, next) => {
+const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await User.findByPk(req.userId);
     const roles = await user.getRoles();
@@ -67,29 +69,7 @@ isAdmin = async (req, res, next) => {
   }
 };
 
-isModerator = async (req, res, next) => {
-  try {
-    const user = await User.findByPk(req.userId);
-    const roles = await user.getRoles();
-
-    for (let i = 0; i < roles.length; i++) {
-      if (roles[i].name === "moderator") {
-        return next();
-      }
-    }
-
-    return res.status(403).send({
-      message: "Require Moderator Role!",
-    });
-  } catch (error) {
-    return res.status(500).send({
-      message: "Unable to validate Moderator role!",
-    });
-  }
-};
-
-// New
-isOwner = async (req, res, next) => {
+const isOwner = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await User.findByPk(req.userId);
     const roles = await user.getRoles();
@@ -110,8 +90,7 @@ isOwner = async (req, res, next) => {
   }
 };
 
-// New
-isAgent = async (req, res, next) => {
+const isAgent = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await User.findByPk(req.userId);
     const roles = await user.getRoles();
@@ -133,7 +112,7 @@ isAgent = async (req, res, next) => {
 };
 
 // New
-isMonitor = async (req, res, next) => {
+const isMonitor = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await User.findByPk(req.userId);
     const roles = await user.getRoles();
@@ -154,38 +133,12 @@ isMonitor = async (req, res, next) => {
   }
 };
 
-isModeratorOrAdmin = async (req, res, next) => {
-  try {
-    const user = await User.findByPk(req.userId);
-    const roles = await user.getRoles();
-
-    for (let i = 0; i < roles.length; i++) {
-      if (roles[i].name === "moderator") {
-        return next();
-      }
-
-      if (roles[i].name === "admin") {
-        return next();
-      }
-    }
-
-    return res.status(403).send({
-      message: "Require Moderator or Admin Role!",
-    });
-  } catch (error) {
-    return res.status(500).send({
-      message: "Unable to validate Moderator or Admin role!",
-    });
-  }
-};
-
 const authJwt = {
   verifyToken,
   isAdmin,
-  isOwner, // New
-  isAgent, // New
-  isMonitor, // New
-  isModerator,
-  isModeratorOrAdmin,
+  isOwner,
+  isAgent,
+  isMonitor,
 };
-module.exports = authJwt;
+
+export default authJwt;

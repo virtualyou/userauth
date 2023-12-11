@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -18,66 +17,83 @@
  *
  */
 
-const db = require("../models");
+import { Request, Response } from "express";
+import db from "../models";
+
 const User = db.user;
 
-exports.allAccess = (req, res) => {
+const allAccess = (_req: Request, res: Response) => {
   res.status(200).send("Public Content.");
 };
 
-exports.ownerBoard = (req, res) => {
+const ownerBoard = (_req: Request, res: Response) => {
   res.status(200).send("Owner dashboard for signed in user.");
 };
 
-exports.adminBoard = (req, res) => {
+const adminBoard = (_req: Request, res: Response) => {
   res.status(200).send("Admin dashboard for signed in user.");
 };
 
-exports.agentBoard = (req, res) => {
+const agentBoard = (_req: Request, res: Response) => {
   res.status(200).send("Agent dashboard for signed in user.");
 };
 
-exports.monitorBoard = (req, res) => {
+const monitorBoard = (_req: Request, res: Response) => {
   res.status(200).send("Monitor dashboard for signed in user.");
 };
 
 // ROLE_ADMIN ONLY (needs authorization)
-exports.getAllUsers = async (req, res) => {
+const getAllUsers = async (_req: Request, res: Response) => {
   try {
     const users = await User.findAll();
     res.send(users);
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    res.status(500).send({ message: "Internal server error." });
   }
 };
 
 // ROLE_ANY (still needs authorization in production)
-exports.getUserById = async (req, res) => {
+const getUserById = async (req: Request, res: Response) => {
   try {
-    const user = await User.findByPk(req.params.id);
+    const user = await User.findByPk(req.params["id"]);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
     return res.json(user);
   } catch (error) {
-    return res.status(500).send({ message: error.message });
+    return res.status(500).send({ message: "Internal server error" });
   }
 };
 
 // ROLE_ANY (still needs authorization in production)
-exports.getUserRoles = async (req, res) => {
+const getUserRoles = async (req: Request, res: Response) => {
   try {
-    const user = await User.findByPk(req.params.id);
+    const user = await User.findByPk(req.params["id"]);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
     const roles = await user.getRoles();
     if (!roles) {
-      return res.status(404).json({ error: 'User roles not found' });
+      return res.status(404).json({ error: "User roles not found" });
     }
+
     return res.json(roles);
-    } catch (error) {
-      return res.status(500).send({ message: error.message });
-    }
+  } catch (error) {
+    return res.status(500).send({ message: "Internal server error" });
+  }
 };
 
+const userController = {
+  allAccess,
+  ownerBoard,
+  agentBoard,
+  monitorBoard,
+  adminBoard,
+
+  // these are important, the above may go away
+  getUserRoles,
+  getUserById,
+  getAllUsers,
+};
+
+export default userController;
