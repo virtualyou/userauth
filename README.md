@@ -37,7 +37,7 @@ Follow these steps to run this API locally.
 5. `docker-compose up -d`
 
 NOTE: The virtualyou schema is now running on localhost:3306 and shows no tables until the `vy-userauth`
-API has been run to create the users, user_roles, and roles tables. In production these lines in `server.js`
+API has been run to create the users, user_roles, and roles tables. In production these lines in `index.ts`
 will look just like this.
 
 ```javascript
@@ -52,7 +52,7 @@ db.sequelize.sync();
 ```
 6. Do the following, one time only for local testing. Comment the `db.sequelize.sync();` line and uncomment
    the commented section calling `initial();`
-7. In `server.js` comment the cookie domain around line 19.
+7. In `index.ts` comment the cookie domain around line 19.
 8. Run `npm start`. This will create the tables and create the static Role objects.
 9. Kill the running server, put the code back with the `db.sequelize.sync()`, and `npm start` again. The database is prepared for use
    now.

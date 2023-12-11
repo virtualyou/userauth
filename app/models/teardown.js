@@ -1,4 +1,4 @@
-const app = require('./app/app.js');
+const app = require('./src/src.js');
 
 module.exports = async () => {
     // close Sequelize connections here
