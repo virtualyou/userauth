@@ -23,7 +23,6 @@ import logger from "./middleware/logger";
 
 const server = app.listen(Number(config.server.port), () => {
   logger.log("info", `Server is running on Port: ${config.server.port}`);
-  logger.log("info", `Server URL is: ${config.server.url}`);
 });
 
 process.on("SIGTERM", () => {

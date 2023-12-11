@@ -28,8 +28,7 @@ dotenv.config({
 
 const envSchema = Joi.object().keys({
   NODE_ENV: Joi.string().valid("production", "development", "test").required(),
-  PORT: Joi.string().required().default("3006"),
-  SERVER_URL: Joi.string().required().default("http://localhost"),
+  PORT: Joi.string().required().default("3001"),
   DB_HOST: Joi.string().required().default("localhost"),
   DB_USER: Joi.string().required().default("root"),
   DB_PASSWORD: Joi.string().required().default("mariadbAdmin123"),
@@ -52,7 +51,6 @@ const config = {
   node_env: validatedEnv.NODE_ENV,
   server: {
     port: validatedEnv.PORT,
-    url: validatedEnv.SERVER_URL,
   },
   database: {
     host: validatedEnv.DB_HOST,

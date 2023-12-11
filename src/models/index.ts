@@ -17,16 +17,15 @@
  *
  */
 
-//const config = require("../config/db.config.js");
 import config from "../config/config";
 import { Sequelize } from "sequelize-typescript";
 import Role from "./role.model";
 import User from "./user.model";
 
 const sequelize = new Sequelize(
-  config.database.db,
-  config.database.user,
-  config.database.password,
+    config.database.db,
+    config.database.user,
+    config.database.password,
   {
     logging: false,
     host: config.database.host,

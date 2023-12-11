@@ -21,9 +21,10 @@
 import request from "supertest";
 import app from "../src/app";
 
+// happy path
 describe("Test Signup", () => {
   it("POST /userauth/v1/auth/signup", async () => {
-    const userSuffixNum = Math.floor(Math.random() * (999 - 100 + 1) + 100);
+    const userSuffixNum = Math.floor(Math.random() * (9999 - 1000 + 1) + 1000);
     const newuser = "bob" + userSuffixNum;
 
     const response = await request(app)
@@ -38,6 +39,76 @@ describe("Test Signup", () => {
   });
 });
 
+// unhappy path
+describe("Test Signup ... Existing email", () => {
+  it("POST /userauth/v1/auth/signup", async () => {
+    const newuser = "bobo";
+
+    const response = await request(app)
+        .post("/userauth/v1/auth/signup")
+        .send({
+          username: newuser,
+          email: "owner@yahoo.com",
+          password: "abc123",
+        });
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toEqual({ message: "Failed! Email is already in use!" });
+  });
+});
+
+// unhappy path
+describe("Test Signup ... Existing user", () => {
+  it("POST /userauth/v1/auth/signup", async () => {
+    const existinguser = "owner";
+
+    const response = await request(app)
+        .post("/userauth/v1/auth/signup")
+        .send({
+          username: existinguser,
+          email: "bobo@yahoo.com",
+          password: "abc123",
+        });
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toEqual({ message: "Failed! Username is already in use!" });
+  });
+});
+
+// unhappy path
+describe("Test Signup ... No username in Body", () => {
+  it("POST /userauth/v1/auth/signup", async () => {
+
+    const response = await request(app)
+        .post("/userauth/v1/auth/signup")
+        .send({
+          email: "someone@yahoo.com",
+          password: "abc123",
+        });
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toEqual({ message: "Internal server error" });
+  });
+});
+
+// unhappy path
+describe("Test Signup ... incorrect Role sent", () => {
+  it("POST /userauth/v1/auth/signup", async () => {
+    const userSuffixNum = Math.floor(Math.random() * (999 - 100 + 1) + 100);
+    const newuser = "bob" + userSuffixNum;
+
+    const response = await request(app)
+        .post("/userauth/v1/auth/signup")
+        .send({
+          username: newuser,
+          email: newuser + "@yahoo.com",
+          password: "abc123",
+          ownerId: 0,
+          roles: ["delivery"]
+        });
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toEqual({ message: "Failed! Role does not exist." });
+  });
+});
+
+// happy path
 describe("Test Signin", () => {
   it("POST /userauth/v1/auth/signin", async () => {
     const response = await request(app).post("/userauth/v1/auth/signin").send({
@@ -49,6 +120,7 @@ describe("Test Signin", () => {
   });
 });
 
+// happy path
 describe("Test Signout", () => {
   it("POST /userauth/v1/auth/signout", async () => {
     const response = await request(app).post("/userauth/v1/auth/signout").send({
@@ -177,6 +249,46 @@ describe("Test Admin dashboard request with JWT", () => {
   });
 });
 
+// unhappy path
+describe("Test unauthorized", () => {
+  let cookie: string[] = [];
+  const agent = request.agent(app);
+
+  beforeAll(async () => {
+    const response = await agent.post("/userauth/v1/auth/signin").send({
+      username: "admin",
+      password: "abc123",
+    });
+    cookie = response.get("Set-Cookie");
+  });
+
+  afterAll(async () => {
+    await agent.post("/userauth/v1/auth/signout").send({
+      username: "admin",
+      password: "abc123",
+    });
+  });
+
+  it("GET /userauth/v1/agent", async () => {
+    const response2 = await agent.get("/userauth/v1/agent").set(cookie);
+    expect(response2.statusCode).toBe(403);
+    expect(response2.type).toBe("application/json");
+    expect(response2.body).toEqual({"message": "Require Agent Role!"});
+  });
+});
+
+
+// unhappy path
+describe("Test no token provided", () => {
+  const agent = request.agent(app);
+
+  it("GET /userauth/v1/owner", async () => {
+    const response = await agent.get("/userauth/v1/owner");
+    expect(response.statusCode).toBe(403);
+    expect(response.text).toContain("No token provided!");
+  });
+});
+
 describe("Test admin resource for list of users", () => {
   let cookie: string[] = [];
   const agent = request.agent(app);
@@ -194,5 +306,70 @@ describe("Test admin resource for list of users", () => {
     expect(response4.statusCode).toBe(200);
     expect(response4.type).toBe("application/json");
     expect(response4.body).toBeTruthy();
+  });
+});
+
+/*
+ * happy path
+ */
+describe("Test root path welcome", () => {
+  const agent = request.agent(app);
+  it("GET /", async () => {
+    const response4 = await agent.get("/");
+    expect(response4.statusCode).toBe(200);
+    expect(response4.type).toBe("text/html");
+    expect(response4.text).toContain("Welcome to the VirtuaYou UserAuth API.");
+  });
+});
+
+/*
+ * get roles for a user
+ */
+describe("Test roles for user", () => {
+  let cookie: string[] = [];
+  const agent = request.agent(app);
+
+  beforeAll(async () => {
+    const response = await agent.post("/userauth/v1/auth/signin").send({
+      username: "admin",
+      password: "abc123",
+    });
+    cookie = response.get("Set-Cookie");
+  });
+
+  it("GET /userauth/v1/users/1/roles", async () => {
+    const response2 = await agent.get("/userauth/v1/users/1/roles").set(cookie);
+    expect(response2.statusCode).toBe(200);
+    expect(response2.type).toBe("application/json");
+/*
+    Received array: [
+      {
+        "createdAt": "2023-12-10T01:13:47.000Z",
+        "updatedAt": "2023-12-10T01:13:47.000Z",
+        "id": 1,
+        "name": "owner",
+        "user_roles": {
+          "userId": 1
+          "roleId": 1,
+          "createdAt": "2023-12-10T01:14:14.000Z",
+          "updatedAt": "2023-12-10T01:14:14.000Z",
+         }
+       }
+     ]
+ */
+    for (let i = 0; i < response2.body.length; i++) {
+      if (response2.body[i].name === "owner") {
+        expect(response2.body[i].name).toEqual('owner');
+      }
+      if (response2.body[i].name === "agent") {
+        expect(response2.body[i].name).toEqual('owner');
+      }
+      if (response2.body[i].name === "monitor") {
+        expect(response2.body[i].name).toEqual('owner');
+      }
+      if (response2.body[i].name === "admin") {
+        expect(response2.body[i].name).toEqual('admin');
+      }
+    }
   });
 });

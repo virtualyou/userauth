@@ -4,7 +4,7 @@ import * as dotenv from "dotenv";
 import db from "./models/index";
 import authRouter from "./routes/auth.routes";
 import userRouter from "./routes/user.routes";
-import session from "express-session";
+import cookieSession from "cookie-session";
 import * as process from "process";
 
 const initIndex = process.argv.indexOf("--init=true");
@@ -17,13 +17,23 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use(
-  session({
-    secret: "your-secret-key-here",
-    resave: false,
-    saveUninitialized: true,
-  })
+    cookieSession({
+      name: "virtualyou-session",
+      keys: ["COOKIE_SECRET"],
+      httpOnly: true,
+      sameSite: 'strict'
+    })
 );
+
+app.use(function(_req, res, next) {
+  res.setTimeout(120000, function() {
+    console.log('Request has timed out.');
+    res.send(408);
+  });
+  next();
+});
 
 app.get("/", (_req, res) => {
   res.send("Welcome to the VirtuaYou UserAuth API.");
