@@ -1,76 +1,57 @@
 # userauth - User and Authentication API using JWT
 
-This is the User and Authentication/Authorization API. It is currently hosted on public
-DNS at https://userauth.virtualyou.info/ .
+This is the User and Authentication/Authorization API. It is currently 
+hosted on public DNS at https://userauth.virtualyou.info/ .
 
-- Node.js Express User management utilizing CORS, Sequelize ORM
-- Authentication and Authorization of resources within this API using JWT validation and User Roles
-- API resources to assist other, related APIs with Authentication and Authorization (JWT,Role)
+## News
+This API was converted from javascript to typescript on Dec 9, 2023.
 
 ## API Resources
 
-- POST /api/v1/auth/signup
-- POST /api/v1/auth/signin
-- POST /api/v1/auth/signout
-- GET /api/v1/users
-- GET /api/v1/users/{id}
-- GET /api/v1/users/{id}/roles
+- POST /userauth/v1/auth/signup
+- POST /userauth/v1/auth/signin
+- POST /userauth/v1/auth/signout
+- GET /userauth/v1/users
+- GET /userauth/v1/users/{id}
+- GET /userauth/v1/users/{id}/roles
 
 These resources are subject to great change and probably will be removed (no concern to test). These would provide
 HTTP content based on ROLE\_???. Ignore these for now. They are not included in Postman Collection.
 
-- GET /api/v1/all
-- GET /api/v1/owner
-- GET /api/v1/agent
-- GET /api/v1/monitor
-- GET /api/v1/admin
-
-## Pending Refactors
-
-- Convert to Typescript and upgrade controllers to use Repositories, Data Mappers, and DTOs
-- Use ENV exports with Dockerized container
+- GET /userauth/v1/all
+- GET /userauth/v1/owner
+- GET /userauth/v1/agent
+- GET /userauth/v1/monitor
+- GET /userauth/v1/admin
 
 ## Project setup
 
 Follow these steps to run this API locally.
 
-1. `git clone git@github.com:dlwhitehurst/userauth.git`
+1. `git clone git@github.com:virtualyou/userauth.git`
 2. `cd userauth`
-3. `cp docker-compose.yaml ~/docker-compose/virtualyou/`
-4. `cd ~/docker-compose/virtualyou`
-5. `docker-compose up -d`
+3. `yarn install`
+4. `yarn dev -- --init=true` # this creates roles
 
-NOTE: The virtualyou schema is now running on localhost:3306 and shows no tables until the `vy-userauth`
-API has been run to create the users, user_roles, and roles tables. In production these lines in `server.js`
-will look just like this.
+WARNING: if the `--init=true` is used, it will wipe all users in an
+established database. Use at your own risk.
 
-```javascript
-/*
-  db.sequelize.sync({force: true}).then(() => {
-    console.log('Drop and Resync Db');
-    initial();
-  });
-*/
+To test and see coverage.
 
-db.sequelize.sync();
-```
-
-6. Do the following, one time only for local testing. Comment the `db.sequelize.sync();` line and uncomment
-   the commented section calling `initial();`
-7. In `server.js` comment the cookie domain around line 19.
-8. Run `npm start`. This will create the tables and create the static Role objects.
-9. Kill the running server, put the code back with the `db.sequelize.sync()`, and `npm start` again. The database is prepared for use
-   now.
+1. `yarn test`
+2. `yarn coverage`
 
 ### Database
 
-The database is MySQL dialect but we will probably use MariaDB for now. This API is currently hosted on
-Kubernetes and it's using MariaDB as a service. Use the docker-compose in an isolated folder away from
-this repo because the docker image uses a volume locally called `data/` and you need root privileges to
-delete this volume.
+The database is MySQL dialect but we will probably use MariaDB for now. 
+This API is currently hosted on Kubernetes and it's using MariaDB as a 
+service. Use the docker-compose in an isolated folder away from this 
+repo because the docker image uses a volume locally called `data/` and 
+you need root privileges to delete this volume.
 
-NOTE: The other API hostings will use the MariaDB schema `virtualyou`. You only need to run the database
-in the background using the docker-compose once.
+NOTE: The other API hostings will use the MariaDB schema `virtualyou`. 
+You only need to run the database in the background using the 
+docker-compose once.
 
 ### Environment
 
@@ -86,13 +67,13 @@ Software dependencies used with this API do not come with the repository
 clone. Use the following command to install dependencies required by `package.json`.
 
 ```
-npm install
+yarn install
 ```
 
 ### Run
 
 ```
-npm start
+yarn dev
 ```
 
 ### Create Docker Image
