@@ -3,6 +3,7 @@ package-lock.json
 .idea/
 ./.env
 .env
+.husky/
 coverage/
 dist/
 logs/
