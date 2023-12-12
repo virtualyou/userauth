@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -16,12 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
+ * role.model.ts
  */
 
-const authJwt = require("./authJwt");
-const verifySignUp = require("./verifySignUp");
-
-module.exports = {
-  authJwt,
-  verifySignUp
+const Role = (sequelize: any, Sequelize: any) => {
+  return sequelize.define("roles", {
+    name: {
+      type: Sequelize.STRING,
+    },
+  });
 };
+
+export default Role;

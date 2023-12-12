@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -16,36 +15,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
+ * user.model.ts
  */
 
-module.exports = (sequelize, Sequelize) => {
-  const User = sequelize.define("users", {
+const User = (sequelize: any, Sequelize: any) => {
+  return sequelize.define("users", {
     username: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     email: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     password: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     ownerId: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     },
     agentMnemonic: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     monitorMnemonic: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
     },
     agentId: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     },
     monitorId: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
     },
-
   });
-
-  return User;
 };
+
+export default User;

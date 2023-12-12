@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -18,41 +17,43 @@
  *
  */
 
-const config = require("../config/db.config.js");
+import config from "../config/config";
+import { Sequelize } from "sequelize-typescript";
+import Role from "./role.model";
+import User from "./user.model";
 
-const Sequelize = require("sequelize");
 const sequelize = new Sequelize(
-  config.DB,
-  config.USER,
-  config.PASSWORD,
+    config.database.db,
+    config.database.user,
+    config.database.password,
   {
-    host: config.HOST,
-    dialect: config.dialect,
     logging: false,
+    host: config.database.host,
+    dialect: config.database.dialect,
     pool: {
-      max: config.pool.max,
-      min: config.pool.min,
-      acquire: config.pool.acquire,
-      idle: config.pool.idle
-    }
+      max: config.database.pool.max,
+      min: config.database.pool.min,
+      acquire: config.database.pool.acquire,
+      idle: config.database.pool.idle,
+    },
   }
 );
 
-const db = {};
+const db: any = {};
 
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
+db["sequelize"] = sequelize;
+db["Sequelize"] = Sequelize;
 
-db.user = require("../models/user.model.js")(sequelize, Sequelize);
-db.role = require("../models/role.model.js")(sequelize, Sequelize);
+db.role = Role(sequelize, Sequelize);
+db.user = User(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
-  through: "user_roles"
+  through: "user_roles",
 });
 db.user.belongsToMany(db.role, {
-  through: "user_roles"
+  through: "user_roles",
 });
 
 db.ROLES = ["owner", "agent", "monitor", "admin"];
 
-module.exports = db;
+export default db;

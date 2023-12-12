@@ -1,4 +1,3 @@
-
 /*
  *
  * VirtualYou Project
@@ -18,6 +17,10 @@
  *
  */
 
+import authJwt from "./authJwt";
+import verifySignUp from "./verifySignUp";
+
 module.exports = {
-  secret: "virtual-you-secret"
+  authJwt,
+  verifySignUp,
 };
