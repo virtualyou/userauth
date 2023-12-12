@@ -74,7 +74,7 @@
     "@types/supertest": "^2.0.12",
     "@types/uuid": "^9.0.1",
     "@types/validator": "*",
-    "@typescript-eslint/eslint-plugin": "^6.13.2",
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^6.13.2",
     "babel-jest": "^29.7.0",
     "eslint-config-prettier": "^8.6.0",
