@@ -18,6 +18,7 @@
  * role.model.ts
  */
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Role = (sequelize: any, Sequelize: any) => {
   return sequelize.define("roles", {
     name: {

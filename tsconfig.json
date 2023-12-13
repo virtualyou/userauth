@@ -34,5 +34,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "forceConsistentCasingInFileNames": true
+  },
+  "typedocOptions": {
+    "entryPoints": ["src/*.ts"],
+    "out": "docs"
   }
 }

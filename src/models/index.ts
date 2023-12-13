@@ -39,6 +39,7 @@ const sequelize = new Sequelize(
   }
 );
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const db: any = {};
 
 db["sequelize"] = sequelize;

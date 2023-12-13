@@ -28,19 +28,6 @@ const User = db.user;
 const Role = db.role;
 const Op = db.Sequelize.Op;
 
-/*
-class ExpressError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = 'ExpressError';
-    }
-}
-const errorHandler = (err: ExpressError, _req: Request, res: Response) => {
-    console.error(err.stack);
-    res.status(500).send('Internal server error');
-};
-*/
-
 const signup = async (req: Request, res: Response) => {
   // Save User to Database
   try {
@@ -79,7 +66,7 @@ const signup = async (req: Request, res: Response) => {
         res.send({ message: "User registered successfully!" });
       }
     }
-  } catch (err: any) {
+  } catch (error) {
     res.status(500).send("Internal server error");
   }
 };
@@ -117,14 +104,13 @@ const signin = async (req: Request, res: Response) => {
       }
     );
 
-    let authorities = [];
+    const authorities = [];
     const roles = await user.getRoles();
 
     for (let i = 0; i < roles.length; i++) {
       authorities.push("ROLE_" + roles[i].name.toUpperCase());
     }
 
-    // @ts-ignore
     req.session.token = token;
 
     res.set(
@@ -144,15 +130,14 @@ const signin = async (req: Request, res: Response) => {
       agentId: user.agentId,
       monitorId: user.monitorId,
     });
-  } catch (err: any) {
+  } catch (error) {
     return res.status(500).send({ message: "Internal server error" });
   }
 };
 
 const signout = async (req: Request, res: Response) => {
   try {
-    // @ts-ignore
-    req.session.token = null;
+    req.session.token = "";
     return res.status(200).send({
       message: "You've been signed out!",
     });

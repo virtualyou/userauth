@@ -1,6 +1,6 @@
 {
   "name": "userauth",
-  "version": "0.1.4-dev",
+  "version": "0.1.5-local",
   "description": "",
   "author": "David L Whitehurst",
   "license": "Apache-2.0",
@@ -94,6 +94,7 @@
     "prisma": "^4.11.0",
     "supertest": "^6.3.3",
     "ts-jest": "^29.0.5",
+    "typedoc": "^0.25.4",
     "typescript": "5.0.2"
   },
   "repository": {

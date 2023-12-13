@@ -18,6 +18,7 @@
  * user.model.ts
  */
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const User = (sequelize: any, Sequelize: any) => {
   return sequelize.define("users", {
     username: {
