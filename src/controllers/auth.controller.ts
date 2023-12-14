@@ -55,12 +55,13 @@ const signup = async (req: Request, res: Response) => {
         },
       });
 
+      // set roles plural (NOT VIA UI)
       const result = user.setRoles(roles);
       if (result) {
         res.send({ message: "User registered successfully!" });
       }
     } else {
-      // user only one role
+      // user only one role (DEFAULT)
       const result = user.setRoles([1]);
       if (result) {
         res.send({ message: "User registered successfully!" });
@@ -94,8 +95,17 @@ const signin = async (req: Request, res: Response) => {
       });
     }
 
+    const authorities = [];
+    const roles = await user.getRoles();
+    let newrole;
+
+    for (let i = 0; i < roles.length; i++) {
+      newrole = roles[i].name;
+      authorities.push("ROLE_" + roles[i].name.toUpperCase());
+    }
+
     const token = jwt.sign(
-      { id: user.id, owner: user.ownerId },
+      { id: user.id, owner: user.ownerId, role: newrole },
       cookieConfig.secret,
       {
         algorithm: "HS256",
@@ -103,13 +113,6 @@ const signin = async (req: Request, res: Response) => {
         expiresIn: 86400, // 24 hours
       }
     );
-
-    const authorities = [];
-    const roles = await user.getRoles();
-
-    for (let i = 0; i < roles.length; i++) {
-      authorities.push("ROLE_" + roles[i].name.toUpperCase());
-    }
 
     req.session.token = token;
 

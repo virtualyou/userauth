@@ -10,6 +10,7 @@ declare namespace Express {
     };
     userId: string;
     ownerId: string;
+    role: string;
   }
   export interface Response {
     customProperty: string;
