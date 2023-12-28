@@ -64,7 +64,7 @@ userRouter.get(
 
 userRouter.get(
   "/userauth/v1/users/:id",
-  [authJwt.verifyToken],
+  [authJwt.isApp],
   userController.getUserById
 );
 
