@@ -36,6 +36,7 @@ const signup = async (req: Request, res: Response) => {
 
     const user = await User.create({
       username: req.body.username,
+      fullname: req.body.fullname,
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, 8),
       ownerId: req.body.ownerId,
@@ -125,6 +126,7 @@ const signin = async (req: Request, res: Response) => {
     return res.status(200).send({
       id: user.id,
       username: user.username,
+      fullname: user.fullname,
       email: user.email,
       roles: authorities,
       ownerId: user.ownerId,

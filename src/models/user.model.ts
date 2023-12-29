@@ -24,6 +24,9 @@ const User = (sequelize: any, Sequelize: any) => {
     username: {
       type: Sequelize.STRING,
     },
+    fullname: {
+      type: Sequelize.STRING,
+    },
     email: {
       type: Sequelize.STRING,
     },

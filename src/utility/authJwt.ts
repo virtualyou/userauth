@@ -20,12 +20,9 @@
 
 import jwt from "jsonwebtoken";
 import cookieConfig from "../config/auth.config";
-import db from "../models";
 import { Request, Response, NextFunction } from "express";
 import CryptoUtils from "./crypto.utils";
-
-const User = db.user;
-
+import logger from '../middleware/logger';
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     logger.log('info', 'checking for a token');
 
