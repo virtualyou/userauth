@@ -36,6 +36,20 @@ const User = (sequelize: any, Sequelize: any) => {
     ownerId: {
       type: Sequelize.INTEGER,
     },
+    agentOwnerId: {
+      type: Sequelize.INTEGER,
+    },
+    agentActive: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
+    monitorOwnerId: {
+      type: Sequelize.INTEGER,
+    },
+    monitorActive: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
     agentMnemonic: {
       type: Sequelize.STRING,
     },

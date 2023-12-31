@@ -22,6 +22,18 @@ import db from "../models";
 
 const User = db.user;
 
+class ExpressError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ExpressError';
+  }
+}
+
+const errorHandler = (err: ExpressError, _req: Request, res: Response) => {
+  console.error(err.stack);
+  res.status(500).send('Internal server error');
+};
+
 const allAccess = (_req: Request, res: Response) => {
   res.status(200).send("Public Content.");
 };
@@ -65,6 +77,63 @@ const getUserById = async (req: Request, res: Response) => {
   }
 };
 
+const getAgentByOwnerId = async (req: Request, res: Response) => {
+  try {
+    const query = {
+      where: {agentOwnerId: req.params["ownerid"]}
+    }
+
+    const user = await User.findOne(query);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    return res.json(user);
+  } catch (error) {
+    return res.status(500).send({ message: "Internal server error" });
+  }
+}
+
+const getMonitorByOwnerId = async (req: Request, res: Response) => {
+  try {
+    const query = {
+      where: {monitorOwnerId: req.params["ownerid"]}
+    }
+    const user = await User.findOne(query);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    return res.json(user);
+  } catch (error) {
+    return res.status(500).send({ message: "Internal server error" });
+  }
+}
+
+const updateUser = async (req: Request, res: Response) => {
+  const id = req.params['id'];
+
+  User.update(req.body, {
+    where: {
+      id: id
+    }
+  })
+      .then((num: number) => {
+        if (num == 1) {
+          res.send({
+            message: "User was updated successfully!"
+          });
+        } else {
+          res.status(404).send({
+            message: `User with id=${id} could not be found!`
+          });
+        }
+      })
+      .catch((err: ExpressError) => {
+        errorHandler(err, req, res);
+      });
+}
+
+
 // ROLE_ANY (still needs authorization in production)
 const getUserRoles = async (req: Request, res: Response) => {
   try {
@@ -76,7 +145,6 @@ const getUserRoles = async (req: Request, res: Response) => {
     if (!roles) {
       return res.status(404).json({ error: "User roles not found" });
     }
-
     return res.json(roles);
   } catch (error) {
     return res.status(500).send({ message: "Internal server error" });
@@ -94,6 +162,9 @@ const userController = {
   getUserRoles,
   getUserById,
   getAllUsers,
+  getAgentByOwnerId,
+  getMonitorByOwnerId,
+  updateUser,
 };
 
 export default userController;

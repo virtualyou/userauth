@@ -63,15 +63,37 @@ userRouter.get(
 );
 
 userRouter.get(
+    "/userauth/v1/users/:id/roles",
+    [authJwt.verifyToken],
+    userController.getUserRoles
+);
+
+// ************************************************************
+// FOR APPLICATION USE ONLY
+
+userRouter.get(
   "/userauth/v1/users/:id",
   [authJwt.isApp],
   userController.getUserById
 );
 
 userRouter.get(
-  "/userauth/v1/users/:id/roles",
-  [authJwt.verifyToken],
-  userController.getUserRoles
+    "/userauth/v1/users/agents/:ownerid",
+    [authJwt.isApp],
+    userController.getAgentByOwnerId
+);
+
+userRouter.get(
+    "/userauth/v1/users/monitors/:ownerid",
+    [authJwt.isApp],
+    userController.getMonitorByOwnerId
+);
+
+// PUT - update a user
+userRouter.put(
+    "/userauth/v1/users/:id",
+    [authJwt.isApp],
+    userController.updateUser
 );
 
 export default userRouter;
