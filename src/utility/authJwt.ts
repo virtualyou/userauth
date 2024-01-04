@@ -21,21 +21,20 @@
 import jwt from "jsonwebtoken";
 import cookieConfig from "../config/auth.config";
 import { Request, Response, NextFunction } from "express";
-import CryptoUtils from "./crypto.utils";
 import logger from '../middleware/logger';
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-    logger.log('info', 'checking for a token');
+    logger.log('info', 'checking for a token in userauth API');
 
     const token = req.session.token;
 
     if (!token) {
-        console.log("no token?");
+        logger.log('info', 'no token in userauth API');
         return res.status(403).send({
             message: "No token provided!",
         });
     }
 
-    logger.log('info', 'we have a token');
+    logger.log('info', 'we have a token in userauth API');
 
     jwt.verify(token,
         cookieConfig.secret,
@@ -157,45 +156,29 @@ const isAgent = async (req: Request, res: Response, next: NextFunction) => {
 
 const isMonitor = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        logger.log('info', 'in isMonitor in userauth API');
+
         const role = req.role;
 
         if (role === "monitor") {
+            logger.log('info', 'in isMonitor we have a monitor role in userauth API');
             return next();
         }
+
+        logger.log('info', 'in isMonitor and we do not have a monitor role in userauth API');
 
         return res.status(403).send({
             message: "Require Monitor Role!",
         });
 
     } catch (error) {
+        logger.log('info', 'in isMonitor and something is really wrong in userauth API');
+
         return res.status(500).send({
             message: "Unable to validate Monitor role!",
         });
     }
 };
-
-const isApp = async (req: Request, res: Response, next: NextFunction) => {
-  // check headers client_id and client_secret against encrypted + base64 encoded strings for MATCH_ID and MATCH_SECRET
-  const matchId = process.env["MATCH_ID"] || '';
-  const matchSecret = process.env["MATCH_SECRET"] || '';
-
-  const hashedEncodedClientId = req.get('client_id') || ''; // these seem correct
-  const hashedEncodedClientSecret = req.get('client_secret') || ''; // these seem correct
-
-  const hashedMatchId = CryptoUtils.createHash(matchId);
-  const hashedMatchSecret = CryptoUtils.createHash(matchSecret);
-
-  const hashedEncodedMatchId = btoa(hashedMatchId);
-  const hashedEncodedMatchSecret = btoa(hashedMatchSecret);
-
-  if (hashedEncodedMatchId === hashedEncodedClientId && hashedEncodedMatchSecret === hashedEncodedClientSecret) {
-    return next();
-  } else {
-    return res.status(500).send({
-      message: "Unable to validate clientId and clientSecret!",
-    });
-  }
-}
 
 const authJwt = {
     verifyToken,
@@ -205,6 +188,6 @@ const authJwt = {
     isOwnerOrAgentOrMonitor,
     isAgent,
     isMonitor,
-    isApp,
 };
+
 export default authJwt;

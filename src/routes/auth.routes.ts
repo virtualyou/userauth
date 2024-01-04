@@ -51,6 +51,18 @@ authRouter.post(
   authController.signup
 );
 
+authRouter.post(
+    "/userauth/v1/auth/agent/signup",
+    [verifySignUp.checkDuplicateUsernameOrEmail, verifySignUp.checkRolesExisted],
+    authController.agentSignup
+);
+
+authRouter.post(
+    "/userauth/v1/auth/monitor/signup",
+    [verifySignUp.checkDuplicateUsernameOrEmail, verifySignUp.checkRolesExisted],
+    authController.monitorSignup
+);
+
 authRouter.post("/userauth/v1/auth/signin", authController.signin);
 
 authRouter.post("/userauth/v1/auth/signout", authController.signout);
