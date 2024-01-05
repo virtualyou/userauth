@@ -62,6 +62,9 @@ const User = (sequelize: any, Sequelize: any) => {
     monitorId: {
       type: Sequelize.INTEGER,
     },
+    mfa: {
+      type: Sequelize.INTEGER,
+    },
   });
 };
 

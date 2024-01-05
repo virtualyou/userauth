@@ -28,6 +28,7 @@ export async function createAgent(body: CreateRequest) {
         monitorMnemonic: bip39.generateMnemonic(),
         agentId: 0,
         monitorId: 0,
+        mfa: 0,
     });
     // user only one role (DEFAULT)
     user.setRoles([2]);
@@ -50,6 +51,7 @@ export async function createMonitor(body: CreateRequest) {
         monitorMnemonic: bip39.generateMnemonic(),
         agentId: 0,
         monitorId: 0,
+        mfa: 0,
     });
     // user only one role (DEFAULT)
     user.setRoles([3]);

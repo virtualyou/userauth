@@ -48,9 +48,14 @@ const createHash = (str: string): string => {
     return md.digest().toHex();
 };
 
+const createThreeDigitRandomInteger = () => {
+    return Math.floor(Math.random() * (999 - 100 + 1) + 100);
+}
+
 const cryptoUtils = {
     encrypt,
     decrypt,
     createHash,
+    createThreeDigitRandomInteger,
 };
 export default cryptoUtils;

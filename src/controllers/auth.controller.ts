@@ -25,6 +25,7 @@ import * as bip39 from "bip39"; // TODO read about the syntax here
 import cookieConfig from "../config/auth.config";
 import logger from '../middleware/logger';
 import { createAgent, createMonitor } from './support/auth.support';
+import CryptoUtils from "../utility/crypto.utils";
 
 const User = db.user;
 const Role = db.role;
@@ -72,6 +73,7 @@ const signup = async (req: Request, res: Response) => {
             monitorMnemonic: mnemonic2,
             agentId: 0,
             monitorId: 0,
+            mfa: CryptoUtils.createThreeDigitRandomInteger(),
         });
 
         // user could have multiple roles
