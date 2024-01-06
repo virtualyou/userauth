@@ -224,6 +224,7 @@ const signin = async (req: Request, res: Response) => {
             monitorMnemonic: user.monitorMnemonic,
             agentId: user.agentId,
             monitorId: user.monitorId,
+            mfa: user.mfa,
         });
     } catch (error) {
         return res.status(500).send({message: "Internal server error"});
