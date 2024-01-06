@@ -78,9 +78,42 @@ const checkRolesExisted = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
+const checkRSVP = async (req: Request, res: Response, next: NextFunction) => {
+  if (req.body.rsvp) {
+    let ownerId;
+    // check this rsvp against owner.mfa, agentOwnerId or monitorOwnerId will be available on Request object (POST)
+    if (req.body.agentOwnerId !== 0) {
+      ownerId = req.body.agentOwnerId;
+    }
+
+    if (req.body.monitorOwnerId !== 0) {
+      ownerId = req.body.monitorOwnerId;
+    }
+
+    let user = await User.findOne({
+      where: {
+        id: ownerId,
+      },
+    });
+
+    if (user.mfa == req.body.rsvp) {
+      next();
+    } else {
+      res.status(401).send({
+        message: "Failed! The RSVP is unauthorized.",
+      })
+    }
+  } else {
+    res.status(400).send({
+      message: "Failed! RSVP was not sent.",
+    })
+  }
+}
+
 const verifySignUp = {
   checkDuplicateUsernameOrEmail,
   checkRolesExisted,
+  checkRSVP,
 };
 
 //module.exports = verifySignUp;

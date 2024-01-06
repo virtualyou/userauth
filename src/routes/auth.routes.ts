@@ -53,13 +53,13 @@ authRouter.post(
 
 authRouter.post(
     "/userauth/v1/auth/agent/signup",
-    [verifySignUp.checkDuplicateUsernameOrEmail, verifySignUp.checkRolesExisted],
+    [verifySignUp.checkRSVP, verifySignUp.checkDuplicateUsernameOrEmail, verifySignUp.checkRolesExisted],
     authController.agentSignup
 );
 
 authRouter.post(
     "/userauth/v1/auth/monitor/signup",
-    [verifySignUp.checkDuplicateUsernameOrEmail, verifySignUp.checkRolesExisted],
+    [verifySignUp.checkDuplicateUsernameOrEmail, verifySignUp.checkRolesExisted, verifySignUp.checkRSVP],
     authController.monitorSignup
 );
 
