@@ -35,4 +35,10 @@ userRouter.get(
     userController.getUserById
 );
 
+userRouter.get(
+    "/userauth/v1/users",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    userController.getAllUsers
+);
+
 export default userRouter;

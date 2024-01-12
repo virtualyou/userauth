@@ -21,6 +21,17 @@ import { Request, Response } from "express";
 import db from "../models";
 const User = db.user;
 
+class ExpressError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'ExpressError';
+    }
+}
+
+const errorHandler = (err: ExpressError, _req: Request, res: Response) => {
+    console.error(err.stack);
+    res.status(500).send('Internal server error');
+};
 const getUserById = async (req: Request, res: Response) => {
     try {
         const user = await User.findByPk(req.params["id"]);
@@ -33,9 +44,19 @@ const getUserById = async (req: Request, res: Response) => {
     }
 };
 
+const getAllUsers = async (req: Request, res: Response) => {
+    User.findAll()
+        .then((data: UserType) => {
+            res.send(data);
+        })
+        .catch((err: ExpressError) => {
+            errorHandler(err, req, res);
+        });
+}
 
 const userController = {
     getUserById,
+    getAllUsers,
 };
 
 export default userController;
