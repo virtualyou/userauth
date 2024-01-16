@@ -59,12 +59,18 @@ const signup = async (req: Request, res: Response) => {
             monitorActive = true;
         }
 
+        let _ownerId = req.body.ownerId;
+
+        if (req.body.roles[0] == 'admin') {
+            _ownerId = "-1";
+        }
+
         const user = await User.create({
             username: req.body.username,
             fullname: req.body.fullname,
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, 8),
-            ownerId: req.body.ownerId,
+            ownerId: _ownerId,
             agentOwnerId: req.body.agentOwnerId,
             monitorOwnerId: req.body.monitorOwnerId,
             agentActive: agentActive,
@@ -195,8 +201,21 @@ const signin = async (req: Request, res: Response) => {
             authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
 
+        let _ownerid;
+
+        if (newrole === "agent") {
+            _ownerid = user.agentOwnerId;
+        }
+        if (newrole === "monitor") {
+            _ownerid = user.monitorOwnerId;
+        }
+        if (newrole === "owner") {
+            _ownerid = user.id;
+        }
+
+
         const token = jwt.sign(
-            {id: user.id, owner: user.ownerId, role: newrole},
+            {id: user.id, owner: _ownerid, role: newrole},
             cookieConfig.secret,
             {
                 algorithm: "HS256",
@@ -220,6 +239,8 @@ const signin = async (req: Request, res: Response) => {
             email: user.email,
             roles: authorities,
             ownerId: user.ownerId,
+            agentOwnerId: user.agentOwnerId,
+            monitorOwnerId: user.monitorOwnerId,
             agentMnemonic: user.agentMnemonic,
             monitorMnemonic: user.monitorMnemonic,
             agentId: user.agentId,
