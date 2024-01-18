@@ -49,32 +49,32 @@ const signup = async (req: Request, res: Response) => {
         const mnemonic1 = bip39.generateMnemonic();
         const mnemonic2 = bip39.generateMnemonic();
 
-        let agentActive = false;
-        if (req.body.agentOwnerId !== 0) {
-            agentActive = true;
-        }
+//        let agentActive = false;
+//        if (req.body.agentOwnerId != "0") {
+//            agentActive = true;
+//        }
 
-        let monitorActive = false;
-        if (req.body.monitorOwnerId !== 0) {
-            monitorActive = true;
-        }
+//        let monitorActive = false;
+//        if (req.body.monitorOwnerId != "0") {
+//            monitorActive = true;
+//        }
 
-        let _ownerId = req.body.ownerId;
+//        let _ownerId = req.body.ownerId;
 
-        if (req.body.roles[0] == 'admin') {
-            _ownerId = "-1";
-        }
+//        if (req.body.roles[0] == 'admin') {
+//            _ownerId = "-1";
+//        }
 
         const user = await User.create({
             username: req.body.username,
             fullname: req.body.fullname,
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, 8),
-            ownerId: _ownerId,
+            ownerId: req.body.ownerId,
             agentOwnerId: req.body.agentOwnerId,
             monitorOwnerId: req.body.monitorOwnerId,
-            agentActive: agentActive,
-            monitorActive: monitorActive,
+            agentActive: false,
+            monitorActive: false,
             agentMnemonic: mnemonic1,
             monitorMnemonic: mnemonic2,
             agentId: 0,
