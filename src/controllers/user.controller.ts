@@ -44,6 +44,21 @@ const getUserById = async (req: Request, res: Response) => {
     }
 };
 
+const getUserByEmail = async (req: Request, res: Response) => {
+    try {
+        const email = req.query["email"];
+        const user = await User.findAll({
+            where: { email: email},
+        });
+        if (user.length === 0) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        return res.json(user);
+    } catch (error) {
+        return res.status(500).send({ message: "Internal server error" });
+    }
+
+}
 const getAllUsers = async (req: Request, res: Response) => {
     User.findAll()
         .then((data: UserType) => {
@@ -56,6 +71,7 @@ const getAllUsers = async (req: Request, res: Response) => {
 
 const userController = {
     getUserById,
+    getUserByEmail,
     getAllUsers,
 };
 

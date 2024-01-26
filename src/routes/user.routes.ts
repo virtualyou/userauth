@@ -21,6 +21,7 @@ import { NextFunction, Request, Response } from "express";
 import express from "express";
 import userController from "../controllers/user.controller";
 import authJwt from "../utility/authJwt";
+import authApp from "../utility/authApp";
 
 const userRouter = express();
 
@@ -41,4 +42,9 @@ userRouter.get(
     userController.getAllUsers
 );
 
+userRouter.get(
+    "/userauth/v1/email",
+    [authApp.isApp],
+    userController.getUserByEmail
+);
 export default userRouter;
