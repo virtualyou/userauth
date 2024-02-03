@@ -19,7 +19,13 @@
 
 import { Request, Response } from "express";
 import db from "../models";
+import * as bcrypt from "bcryptjs";
+
 const User = db.user;
+
+interface PasswordType {
+    password: string;
+}
 
 class ExpressError extends Error {
     constructor(message: string) {
@@ -57,8 +63,26 @@ const getUserByEmail = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).send({ message: "Internal server error" });
     }
+}
+
+const patchUserPassword = async (req: Request, res: Response) => {
+    try {
+        const user = await User.findByPk(req.params["id"]);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        // patch existing
+        const obj: PasswordType = {
+            password: bcrypt.hashSync(req.body.password, 8)
+        }
+        await user.update(obj);
+        return res.status(200).json({ success: true });
+    } catch (error) {
+        return res.status(500).send({ message: "Internal server error" });
+    }
 
 }
+
 const getAllUsers = async (req: Request, res: Response) => {
     User.findAll()
         .then((data: UserType) => {
@@ -73,6 +97,7 @@ const userController = {
     getUserById,
     getUserByEmail,
     getAllUsers,
+    patchUserPassword,
 };
 
 export default userController;

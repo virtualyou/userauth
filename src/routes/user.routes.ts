@@ -36,6 +36,12 @@ userRouter.get(
     userController.getUserById
 );
 
+userRouter.patch(
+    "/userauth/v1/users/:id",
+    [authApp.isApp],
+    userController.patchUserPassword
+);
+
 userRouter.get(
     "/userauth/v1/users",
     [authJwt.verifyToken, authJwt.isAdmin],
