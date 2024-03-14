@@ -1,6 +1,6 @@
 {
   "name": "userauth",
-  "version": "0.1.19-prod",
+  "version": "0.2.0-dev",
   "description": "",
   "author": "David L Whitehurst",
   "license": "Apache-2.0",
@@ -47,6 +47,7 @@
     "reflect-metadata": "*",
     "sequelize": "^6.31.1",
     "sequelize-typescript": "^2.1.6",
+    "swagger-ui-express": "^4.1.6",
     "ts-node": "^10.9.1",
     "utility-types": "^3.10.0",
     "uuid": "^9.0.0",
@@ -74,6 +75,7 @@
     "@types/node-forge": "^1.3.10",
     "@types/nodemailer": "^6.4.7",
     "@types/supertest": "^2.0.12",
+    "@types/swagger-ui-express": "^4.1.6",
     "@types/uuid": "^9.0.1",
     "@types/validator": "*",
     "@typescript-eslint/eslint-plugin": "^5.43.0",

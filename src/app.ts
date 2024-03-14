@@ -32,6 +32,10 @@ const init = initIndex !== -1;
 
 const app: Express = express();
 
+// swagger api documentation
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "../swagger.json";
+
 dotenv.config();
 
 app.use(cors());
@@ -42,7 +46,7 @@ app.use(
     cookieSession({
       name: "virtualyou-session",
       keys: ["COOKIE_SECRET"],
-      domain: '.virtualyouplan.com',
+      //domain: '.virtualyouplan.com',
       httpOnly: true,
       sameSite: 'strict'
     })
@@ -59,6 +63,9 @@ app.use(function(_req, res, next) {
 app.get("/", (_req, res) => {
   res.send("Welcome to the VirtualYou UserAuth API.");
 });
+
+// swagger path to api documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // database
 const Role = db.role;
