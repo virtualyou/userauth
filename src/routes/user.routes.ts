@@ -48,6 +48,16 @@ userRouter.get(
     userController.getAllUsers
 );
 
+/**
+ * User deletion by admin
+ */
+userRouter.delete(
+    "/userauth/v1/users/:id",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    userController.deleteUserById
+
+);
+
 userRouter.get(
     "/userauth/v1/email",
     [authApp.isApp],

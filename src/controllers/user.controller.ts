@@ -38,6 +38,7 @@ const errorHandler = (err: ExpressError, _req: Request, res: Response) => {
     console.error(err.stack);
     res.status(500).send('Internal server error');
 };
+
 const getUserById = async (req: Request, res: Response) => {
     try {
         const user = await User.findByPk(req.params["id"]);
@@ -48,6 +49,32 @@ const getUserById = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).send({ message: "Internal server error" });
     }
+};
+
+const deleteUserById = async (req: Request, res: Response) => {
+    // url parameter
+    const id = req.params['id'];
+
+    // delete specific record
+    User.destroy({
+        where: {
+            id: id
+        }
+    })
+        .then((num: number) => {
+            if (num == 1) {
+                return res.status(200).send({
+                    message: "User was deleted!"
+                });
+            } else {
+                res.status(404).send({
+                    message: `User was not found!`
+                });
+            }
+        })
+        .catch((err: ExpressError) => {
+            errorHandler(err, req, res);
+        });
 };
 
 const getUserByEmail = async (req: Request, res: Response) => {
@@ -95,6 +122,7 @@ const getAllUsers = async (req: Request, res: Response) => {
 
 const userController = {
     getUserById,
+    deleteUserById,
     getUserByEmail,
     getAllUsers,
     patchUserPassword,
